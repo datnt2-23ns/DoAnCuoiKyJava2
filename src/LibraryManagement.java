@@ -676,46 +676,55 @@ public class LibraryManagement extends JFrame {
 
 		// Xử lý sự kiện các nút
 		btn_themSach.addActionListener(e -> {
-			try {
-				String maSach = tf_maSach.getText();
-				String tenSach = tf_tenSach.getText();
-				String tacGia = tf_tacGia.getText();
-				String theLoai = tf_theLoai.getText();
-				int soTrang = Integer.parseInt(tf_soTrang.getText());
-				String nhaSX = tf_nhaSX.getText();
-				int namXB = Integer.parseInt(tf_namXB.getText());
-				int giaSach = Integer.parseInt(tf_giaSach.getText());
-				int soLuong = Integer.parseInt(tf_soLuong.getText());
+    try {
+        String maSach = tf_maSach.getText();
+        String tenSach = tf_tenSach.getText();
+        String tacGia = tf_tacGia.getText();
+        String theLoai = tf_theLoai.getText();
 
-				Vector<Object> row = new Vector<>();
-				row.add(tableModel.getRowCount() + 1);
-				row.add(maSach);
-				row.add(tenSach);
-				row.add(tacGia);
-				row.add(theLoai);
-				row.add(soTrang);
-				row.add(nhaSX);
-				row.add(namXB);
-				row.add(giaSach);
-				row.add(soLuong);
-				tableModel.addRow(row);
+        int soTrang = Integer.parseInt(tf_soTrang.getText());
+        int namXB = Integer.parseInt(tf_namXB.getText());
+        int giaSach = Integer.parseInt(tf_giaSach.getText());
+        int soLuong = Integer.parseInt(tf_soLuong.getText());
 
-				// Làm mới lại các textfield
-				tf_maSach.setText("");
-				tf_tenSach.setText("");
-				tf_tacGia.setText("");
-				tf_theLoai.setText("");
-				tf_soTrang.setText("");
-				tf_nhaSX.setText("");
-				tf_namXB.setText("");
-				tf_giaSach.setText("");
-				tf_soLuong.setText("");
-			} catch (NumberFormatException ex) {
-				JOptionPane.showMessageDialog(null, "Vui lòng nhập đúng định dạng số cho các trường số!");
-			} catch (Exception ex) {
-				JOptionPane.showMessageDialog(null, "Đã xảy ra lỗi: " + ex.getMessage());
-			}
-		});
+        if (soTrang <= 0 || namXB <= 0 || giaSach <= 0 || soLuong <= 0) {
+            throw new IllegalArgumentException("Các trường số phải là số nguyên dương lớn hơn 0!");
+        }
+
+        String nhaSX = tf_nhaSX.getText();
+
+        Vector<Object> row = new Vector<>();
+        row.add(tableModel.getRowCount() + 1);
+        row.add(maSach);
+        row.add(tenSach);
+        row.add(tacGia);
+        row.add(theLoai);
+        row.add(soTrang);
+        row.add(nhaSX);
+        row.add(namXB);
+        row.add(giaSach);
+        row.add(soLuong);
+        tableModel.addRow(row);
+
+        // Làm mới lại các textfield
+        tf_maSach.setText("");
+        tf_tenSach.setText("");
+        tf_tacGia.setText("");
+        tf_theLoai.setText("");
+        tf_soTrang.setText("");
+        tf_nhaSX.setText("");
+        tf_namXB.setText("");
+        tf_giaSach.setText("");
+        tf_soLuong.setText("");
+    } catch (NumberFormatException ex) {
+        JOptionPane.showMessageDialog(null, "Vui lòng nhập đúng định dạng số cho các trường số!");
+    } catch (IllegalArgumentException ex) {
+        JOptionPane.showMessageDialog(null, ex.getMessage());
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(null, "Đã xảy ra lỗi: " + ex.getMessage());
+    }
+});
+
 
 		btn_suaThongTin.addActionListener(e -> {
 			table.setEnabled(true);
