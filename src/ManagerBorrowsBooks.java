@@ -595,54 +595,58 @@ return isEditable;
         scrollPane.setViewportView(table);
 
         bt_muonSach.addActionListener(e -> {
-            executorService.execute(() -> {
-                try {
-                    String maDocGia = tf_maDocGia.getText().trim();
-                    String maSach = tf_maSach.getText().trim();
-                    String soLuongStr = tf_soLuong.getText().trim();
-                    String ngayMuonStr = tf_ngayMuon.getText().trim();
-                    String ngayHenTraStr = tf_ngayHenTra.getText().trim();
+    executorService.execute(() -> {
+        try {
+            String maDocGia = tf_maDocGia.getText().trim();
+            String maSach = tf_maSach.getText().trim();
+            String soLuongStr = tf_soLuong.getText().trim();
+            String ngayMuonStr = tf_ngayMuon.getText().trim();
+            String ngayHenTraStr = tf_ngayHenTra.getText().trim();
 
-                    if (maDocGia.isEmpty() || maSach.isEmpty() || soLuongStr.isEmpty() || ngayMuonStr.isEmpty() || ngayHenTraStr.isEmpty()) {
-                        throw new IllegalArgumentException("Vui lòng nhập đầy đủ các mục.");
-                    }
+            if (maDocGia.isEmpty() || maSach.isEmpty() || soLuongStr.isEmpty() || ngayMuonStr.isEmpty() || ngayHenTraStr.isEmpty()) {
+                throw new IllegalArgumentException("Vui lòng nhập đầy đủ các mục.");
+            }
 
-                    int soLuong = Integer.parseInt(soLuongStr);
+            int soLuong = Integer.parseInt(soLuongStr);
+            if (soLuong <= 0) {
+                throw new IllegalArgumentException("Số lượng phải là một số nguyên dương lớn hơn 0.");
+            }
 
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                    LocalDate ngayMuon = LocalDate.parse(ngayMuonStr, formatter);
-                    LocalDate ngayHenTra = LocalDate.parse(ngayHenTraStr, formatter);
-                    LocalDate currentDate = LocalDate.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate ngayMuon = LocalDate.parse(ngayMuonStr, formatter);
+            LocalDate ngayHenTra = LocalDate.parse(ngayHenTraStr, formatter);
+            LocalDate currentDate = LocalDate.now();
 
-                    if (ngayMuon.isAfter(currentDate)) {
-                        throw new IllegalArgumentException("Ngày mượn phải nhỏ hơn hoặc bằng ngày hiện tại.");
-                    }
+            if (ngayMuon.isAfter(currentDate)) {
+                throw new IllegalArgumentException("Ngày mượn phải nhỏ hơn hoặc bằng ngày hiện tại.");
+            }
 
-                    if (ngayHenTra.isBefore(currentDate)) {
-                        throw new IllegalArgumentException("Ngày hẹn trả phải lớn hơn ngày hiện tại.");
-                    }
+            if (ngayHenTra.isBefore(currentDate)) {
+                throw new IllegalArgumentException("Ngày hẹn trả phải lớn hơn ngày hiện tại.");
+            }
 
-                    // Add row to the table
-                    Object[] row = {
-                            tableModel.getRowCount() + 1, maDocGia, maSach, soLuong, ngayMuonStr, ngayHenTraStr, "", "Đang mượn"
-                    };
-                    tableModel.addRow(row);
+            // Add row to the table
+            Object[] row = {
+                    tableModel.getRowCount() + 1, maDocGia, maSach, soLuong, ngayMuonStr, ngayHenTraStr, "", "Đang mượn"
+            };
+            tableModel.addRow(row);
 
-                    // Clear text fields
-                    tf_maDocGia.setText("");
-                    tf_maSach.setText("");
-                    tf_soLuong.setText("");
-                    tf_ngayMuon.setText("");
-                    tf_ngayHenTra.setText("");
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(null, "Số lượng phải là một số nguyên.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                } catch (DateTimeParseException ex) {
-                    JOptionPane.showMessageDialog(null, "Định dạng ngày không hợp lệ. Vui lòng nhập theo định dạng dd/MM/yyyy.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                } catch (IllegalArgumentException ex) {
-                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-                }
-            });
-        });
+            // Clear text fields
+            tf_maDocGia.setText("");
+            tf_maSach.setText("");
+            tf_soLuong.setText("");
+            tf_ngayMuon.setText("");
+            tf_ngayHenTra.setText("");
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(null, "Số lượng phải là một số nguyên.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        } catch (DateTimeParseException ex) {
+            JOptionPane.showMessageDialog(null, "Định dạng ngày không hợp lệ. Vui lòng nhập theo định dạng dd/MM/yyyy.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        } catch (IllegalArgumentException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    });
+});
+
 
         bt_suaThongTin.addActionListener(e -> {
 isEditable = true;
